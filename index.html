@@ -1,0 +1,1788 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>To Sell Is Human — Daniel Pink</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+
+:root {
+
+--ink: #111010;
+
+--paper: #ffffff;
+
+--off-white: #f7f5f1;
+
+--light-bg: #f0ede7;
+
+--accent: #c0392b;
+
+--accent-dark: #962d22;
+
+--gold: #9a7d3a;
+
+--muted: #888078;
+
+--border: #e0dbd0;
+
+--sidebar-w: 280px;
+
+}
+
+
+
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--ink); overflow: hidden; }
+
+
+
+#app { display: flex; height: 100vh; }
+
+
+
+/* ── SIDEBAR ── */
+
+#sidebar {
+
+width: var(--sidebar-w);
+
+min-width: var(--sidebar-w);
+
+background: var(--ink);
+
+display: flex;
+
+flex-direction: column;
+
+overflow: hidden;
+
+}
+
+#sidebar-header {
+
+padding: 28px 24px 22px;
+
+border-bottom: 1px solid #2a2820;
+
+}
+
+#sidebar-header .book-label {
+
+font-family: 'DM Mono', monospace;
+
+font-size: 9px;
+
+letter-spacing: .22em;
+
+text-transform: uppercase;
+
+color: var(--gold);
+
+margin-bottom: 10px;
+
+}
+
+#sidebar-header h1 {
+
+font-family: 'Playfair Display', serif;
+
+font-size: 16px;
+
+font-weight: 700;
+
+line-height: 1.3;
+
+color: #fff;
+
+}
+
+#sidebar-header .author {
+
+font-size: 12px;
+
+color: #666;
+
+margin-top: 5px;
+
+font-style: italic;
+
+font-family: 'Playfair Display', serif;
+
+}
+
+#deck-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+
+#deck-list::-webkit-scrollbar { width: 3px; }
+
+#deck-list::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+
+
+.deck-item {
+
+padding: 13px 24px;
+
+cursor: pointer;
+
+border-left: 3px solid transparent;
+
+transition: all .18s ease;
+
+}
+
+.deck-item:hover { background: #1c1a18; }
+
+.deck-item.active { background: #1c1a18; border-left-color: var(--accent); }
+
+.deck-item .deck-num {
+
+font-family: 'DM Mono', monospace;
+
+font-size: 9px;
+
+color: #555;
+
+margin-bottom: 4px;
+
+letter-spacing: .12em;
+
+}
+
+.deck-item.active .deck-num { color: var(--accent); }
+
+.deck-item .deck-title { font-size: 13px; font-weight: 500; color: #ccc; line-height: 1.35; }
+
+.deck-item .deck-sub { font-size: 11px; color: #555; margin-top: 3px; font-style: italic; }
+
+
+
+/* ── MAIN ── */
+
+#main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+
+
+/* ── TOP BAR ── */
+
+#topbar {
+
+padding: 12px 28px;
+
+border-bottom: 1px solid var(--border);
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+background: var(--paper);
+
+flex-shrink: 0;
+
+gap: 20px;
+
+}
+
+.slide-counter {
+
+font-family: 'DM Mono', monospace;
+
+font-size: 11px;
+
+color: var(--muted);
+
+letter-spacing: .08em;
+
+white-space: nowrap;
+
+}
+
+.slide-counter span { color: var(--ink); font-weight: 500; }
+
+.nav-buttons { display: flex; gap: 8px; }
+
+.nav-btn {
+
+background: var(--off-white);
+
+border: 1px solid var(--border);
+
+color: var(--ink);
+
+padding: 7px 16px;
+
+cursor: pointer;
+
+font-family: 'DM Sans', sans-serif;
+
+font-size: 13px;
+
+font-weight: 500;
+
+transition: all .15s;
+
+border-radius: 4px;
+
+white-space: nowrap;
+
+}
+
+.nav-btn:hover:not(:disabled) { background: var(--light-bg); border-color: #ccc; }
+
+.nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+.nav-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.nav-btn.primary:hover:not(:disabled) { background: var(--accent-dark); }
+
+
+
+.progress-bar-wrap { flex: 1; height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; }
+
+.progress-bar-fill { height: 100%; background: var(--accent); transition: width .3s ease; border-radius: 2px; }
+
+
+
+#overview-btn {
+
+background: transparent;
+
+border: 1px solid var(--border);
+
+color: var(--muted);
+
+padding: 7px 13px;
+
+cursor: pointer;
+
+font-family: 'DM Mono', monospace;
+
+font-size: 9px;
+
+letter-spacing: .12em;
+
+text-transform: uppercase;
+
+transition: all .15s;
+
+border-radius: 4px;
+
+white-space: nowrap;
+
+}
+
+#overview-btn:hover { color: var(--ink); border-color: #aaa; background: var(--off-white); }
+
+
+
+/* ── SLIDE AREA ── */
+
+#slide-area { flex: 1; overflow: hidden; position: relative; }
+
+
+
+.slide {
+
+position: absolute; inset: 0;
+
+display: flex; align-items: stretch;
+
+opacity: 0; transform: translateY(16px);
+
+transition: opacity .3s ease, transform .3s ease;
+
+pointer-events: none;
+
+}
+
+.slide.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+
+
+/* ── TITLE SLIDE ── */
+
+.layout-title .slide-inner {
+
+flex: 1;
+
+background: var(--paper);
+
+display: flex;
+
+flex-direction: column;
+
+justify-content: center;
+
+padding: 80px 100px;
+
+position: relative;
+
+overflow: hidden;
+
+}
+
+.layout-title .deck-badge {
+
+display: inline-flex;
+
+align-items: center;
+
+background: var(--ink);
+
+color: #fff;
+
+font-family: 'DM Mono', monospace;
+
+font-size: 10px;
+
+letter-spacing: .18em;
+
+text-transform: uppercase;
+
+padding: 6px 14px;
+
+margin-bottom: 36px;
+
+width: fit-content;
+
+}
+
+.layout-title .deck-badge .badge-dot {
+
+width: 6px; height: 6px;
+
+border-radius: 50%;
+
+margin-right: 10px;
+
+flex-shrink: 0;
+
+}
+
+.layout-title h2 {
+
+font-family: 'Playfair Display', serif;
+
+font-size: clamp(40px, 5.5vw, 72px);
+
+font-weight: 900;
+
+line-height: 1.05;
+
+color: var(--ink);
+
+max-width: 700px;
+
+margin-bottom: 24px;
+
+}
+
+.layout-title .subtitle {
+
+font-size: 17px;
+
+color: var(--muted);
+
+font-style: italic;
+
+font-family: 'Playfair Display', serif;
+
+max-width: 520px;
+
+line-height: 1.55;
+
+}
+
+.title-deco-num {
+
+position: absolute;
+
+right: 80px; bottom: 40px;
+
+font-family: 'Playfair Display', serif;
+
+font-size: 200px;
+
+font-weight: 900;
+
+color: rgba(0,0,0,.04);
+
+line-height: 1;
+
+pointer-events: none;
+
+user-select: none;
+
+}
+
+.title-accent-bar {
+
+position: absolute;
+
+left: 0; top: 0; bottom: 0;
+
+width: 6px;
+
+}
+
+.title-rule {
+
+width: 60px;
+
+height: 3px;
+
+margin-bottom: 32px;
+
+}
+
+
+
+/* ── CONTENT SLIDE ── */
+
+.layout-content .slide-inner {
+
+flex: 1;
+
+background: var(--paper);
+
+display: flex;
+
+position: relative;
+
+overflow: hidden;
+
+}
+
+.slide-content-main {
+
+flex: 1;
+
+padding: 60px 72px;
+
+display: flex;
+
+flex-direction: column;
+
+justify-content: center;
+
+position: relative;
+
+}
+
+.content-accent-bar {
+
+position: absolute;
+
+left: 0; top: 0; bottom: 0;
+
+width: 5px;
+
+}
+
+.slide-tag {
+
+font-family: 'DM Mono', monospace;
+
+font-size: 10px;
+
+letter-spacing: .2em;
+
+text-transform: uppercase;
+
+margin-bottom: 18px;
+
+font-weight: 500;
+
+}
+
+.slide-title-text {
+
+font-family: 'Playfair Display', serif;
+
+font-size: clamp(26px, 3.2vw, 44px);
+
+font-weight: 800;
+
+line-height: 1.15;
+
+color: var(--ink);
+
+margin-bottom: 28px;
+
+}
+
+.slide-body {
+
+font-size: 16px;
+
+line-height: 1.8;
+
+color: #333;
+
+max-width: 640px;
+
+}
+
+.slide-body ul { list-style: none; }
+
+.slide-body ul li {
+
+padding: 10px 0 10px 24px;
+
+position: relative;
+
+border-bottom: 1px solid var(--border);
+
+font-size: 15px;
+
+line-height: 1.6;
+
+}
+
+.slide-body ul li:last-child { border-bottom: none; }
+
+.slide-body ul li::before {
+
+content: '';
+
+position: absolute;
+
+left: 0; top: 50%;
+
+transform: translateY(-50%);
+
+width: 8px; height: 2px;
+
+}
+
+.slide-body strong { color: var(--ink); font-weight: 600; }
+
+.slide-body em { color: #555; }
+
+.slide-body br + br { display: block; content: ''; margin: 6px 0; }
+
+
+
+.slide-footer {
+
+position: absolute;
+
+bottom: 32px; left: 72px; right: 40px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+}
+
+.slide-footer-num {
+
+font-family: 'DM Mono', monospace;
+
+font-size: 10px;
+
+color: #bbb;
+
+letter-spacing: .08em;
+
+}
+
+.slide-footer-rule {
+
+flex: 1;
+
+height: 1px;
+
+background: var(--border);
+
+margin: 0 20px;
+
+}
+
+
+
+/* ── OVERVIEW ── */
+
+#overview {
+
+position: absolute; inset: 0;
+
+background: var(--off-white);
+
+display: flex;
+
+flex-direction: column;
+
+padding: 48px 52px;
+
+overflow-y: auto;
+
+opacity: 0;
+
+transform: translateY(16px);
+
+transition: opacity .3s ease, transform .3s ease;
+
+pointer-events: none;
+
+}
+
+#overview.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+#overview::-webkit-scrollbar { width: 4px; }
+
+#overview::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+
+
+
+#overview h2 {
+
+font-family: 'Playfair Display', serif;
+
+font-size: 38px;
+
+font-weight: 900;
+
+color: var(--ink);
+
+margin-bottom: 6px;
+
+}
+
+#overview .ov-sub {
+
+color: var(--muted);
+
+font-size: 14px;
+
+margin-bottom: 40px;
+
+font-style: italic;
+
+font-family: 'Playfair Display', serif;
+
+}
+
+.ov-grid {
+
+display: grid;
+
+grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+
+gap: 14px;
+
+}
+
+.ov-card {
+
+background: var(--paper);
+
+border: 1px solid var(--border);
+
+padding: 26px 28px;
+
+cursor: pointer;
+
+transition: all .2s;
+
+position: relative;
+
+overflow: hidden;
+
+}
+
+.ov-card:hover { border-color: #aaa; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,.07); }
+
+.ov-card .ov-color-bar {
+
+position: absolute;
+
+left: 0; top: 0; bottom: 0;
+
+width: 4px;
+
+}
+
+.ov-card .ov-num {
+
+font-family: 'DM Mono', monospace;
+
+font-size: 10px;
+
+color: var(--muted);
+
+letter-spacing: .12em;
+
+margin-bottom: 10px;
+
+}
+
+.ov-card .ov-title {
+
+font-family: 'Playfair Display', serif;
+
+font-size: 19px;
+
+font-weight: 700;
+
+color: var(--ink);
+
+line-height: 1.25;
+
+margin-bottom: 6px;
+
+}
+
+.ov-card .ov-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.ov-card .ov-slides {
+
+margin-top: 18px;
+
+font-family: 'DM Mono', monospace;
+
+font-size: 10px;
+
+color: #ccc;
+
+letter-spacing: .1em;
+
+}
+
+.ov-card .ov-deco {
+
+position: absolute;
+
+right: -8px; bottom: -12px;
+
+font-family: 'Playfair Display', serif;
+
+font-size: 90px;
+
+font-weight: 900;
+
+color: rgba(0,0,0,.04);
+
+line-height: 1;
+
+pointer-events: none;
+
+user-select: none;
+
+}
+
+
+
+@media (max-width: 860px) {
+
+#sidebar { display: none; }
+
+.layout-title .slide-inner { padding: 48px 40px; }
+
+.layout-title h2 { font-size: 32px; }
+
+.slide-content-main { padding: 40px 40px; }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="app">
+
+<div id="sidebar">
+
+<div id="sidebar-header">
+
+<div class="book-label">Book Summary Series</div>
+
+<h1>To Sell Is Human</h1>
+
+<div class="author">Daniel H. Pink</div>
+
+</div>
+
+<div id="deck-list"></div>
+
+</div>
+
+
+
+<div id="main">
+
+<div id="topbar">
+
+<button id="overview-btn">⊞ All Decks</button>
+
+<div class="progress-bar-wrap">
+
+<div class="progress-bar-fill" id="progress-fill"></div>
+
+</div>
+
+<div class="slide-counter">Slide <span id="cur-num">—</span> of <span id="total-num">—</span></div>
+
+<div class="nav-buttons">
+
+<button class="nav-btn" id="btn-prev">← Prev</button>
+
+<button class="nav-btn primary" id="btn-next">Next →</button>
+
+</div>
+
+</div>
+
+<div id="slide-area">
+
+<div id="overview"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+const DECKS = [
+
+{
+
+title: "We're All in Sales Now",
+
+subtitle: "Introduction & Core Premise",
+
+color: "#c0392b",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "We're All\nin Sales Now",
+
+sub: "Introduction & Core Premise — Deck 1 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Big Idea",
+
+heading: "Moving Others",
+
+body: "Pink's central concept is <strong>moving others</strong> — getting someone to part with resources, change their behavior, or adopt a new belief. This is not manipulation; it's a fundamental human activity. Think about the last time you tried to convince someone of something. That's what we're talking about."
+
+},
+
+{
+
+type: "content",
+
+tag: "The Data",
+
+heading: "The 1-in-9 Statistic",
+
+body: "Roughly <strong>1 in 9 Americans</strong> is employed in traditional sales roles. That's a striking number — but it turns out it's actually the <em>less</em> interesting part of the story. The more surprising finding is what Pink discovered when he looked beyond traditional sales titles."
+
+},
+
+{
+
+type: "content",
+
+tag: "The Hidden Reality",
+
+heading: "The Hidden 40%",
+
+body: "Across all professions, people spend approximately <strong>40% of their time</strong> in non-sales selling activities — persuading, influencing, convincing. Pink surveyed thousands of workers to arrive at this number. Examples: a nurse convincing a patient, a developer pitching a feature, a teacher motivating a student."
+
+},
+
+{
+
+type: "content",
+
+tag: "Examples",
+
+heading: "What Is Non-Sales Selling?",
+
+body: "<ul><li>A teacher motivating a disengaged student</li><li>An entrepreneur pitching a VC firm</li><li>A parent convincing a child to eat vegetables</li><li>A lawyer persuading a jury</li><li>A doctor getting a patient to follow a plan</li></ul>"
+
+},
+
+{
+
+type: "content",
+
+tag: "Context",
+
+heading: "Why This Matters Now",
+
+body: "Broader workplace trends have made this urgent: the <strong>gig economy</strong>, the rise of solo entrepreneurs, and flatter organizations mean you can no longer hide behind a title or a process. The ability to influence, advocate, and persuade is now a core professional survival skill."
+
+},
+
+{
+
+type: "content",
+
+tag: "Series Roadmap",
+
+heading: "What's Coming",
+
+body: "<ul><li><strong>Deck 2:</strong> How the world of sales has changed</li><li><strong>Decks 3–5:</strong> The new ABCs — Attunement, Buoyancy, Clarity</li><li><strong>Decks 6–7:</strong> Practical skills — Pitch, Improvise, Serve</li></ul>"
+
+}
+
+]
+
+},
+
+{
+
+title: "The Rebirth of a Salesman",
+
+subtitle: "How the World of Sales Has Changed",
+
+color: "#1a5fa8",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "The Rebirth\nof a Salesman",
+
+sub: "How the World of Sales Has Changed — Deck 2 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Old World",
+
+heading: "Information Asymmetry",
+
+body: "Sales used to work through <strong>information asymmetry</strong>: the seller knew things the buyer didn't. A car dealer knew the invoice price. A pharmaceutical rep knew side effects better than the doctor. This knowledge gap was the source of the salesperson's power — and often, their ability to manipulate."
+
+},
+
+{
+
+type: "content",
+
+tag: "The Hinge Point",
+
+heading: "The Internet Changes Everything",
+
+body: "The internet <strong>democratized information</strong>. Buyers now arrive informed — sometimes more so than the seller. The classic example: buyers can look up the exact market value of any car before stepping onto the lot. The old power dynamic has been completely flipped."
+
+},
+
+{
+
+type: "content",
+
+tag: "Macro Trend",
+
+heading: "The Rise of the Entrepreneur",
+
+body: "The explosion of <strong>small businesses, freelancers, and independent contractors</strong> means these people have no sales department to hide behind — they ARE the sales department. Even inside large companies, individuals must pitch their own ideas and advocate for their own projects."
+
+},
+
+{
+
+type: "content",
+
+tag: "Organizational Shift",
+
+heading: "Flat Organizations & Lateral Persuasion",
+
+body: "Traditional hierarchies told people what to do. <strong>Flatter organizations</strong> require people to influence sideways and upward — without formal authority. Consider a mid-level employee who needs buy-in from three departments to move a project forward. Persuasion is now everyone's job."
+
+},
+
+{
+
+type: "content",
+
+tag: "Extinction Event",
+
+heading: "The Death of the Pushy Salesperson",
+
+body: "The old high-pressure tactics — manufactured urgency, information manipulation, aggressive closing — don't just feel bad. <strong>They don't work anymore.</strong> Buyers have options, information, and the ability to share bad experiences publicly. The sleazy salesperson is an endangered species."
+
+},
+
+{
+
+type: "content",
+
+tag: "The New Edge",
+
+heading: "Honesty as Competitive Advantage",
+
+body: "In a world of abundant information and empowered buyers, <strong>honesty and transparency</strong> aren't just the ethical choice — they're the strategic one. Trustworthiness is now a competitive differentiator. The new ABCs: Attunement, Buoyancy, Clarity — coming in Decks 3, 4, and 5."
+
+}
+
+]
+
+},
+
+{
+
+title: "Attunement",
+
+subtitle: "The First New ABC",
+
+color: "#27735a",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "Attunement",
+
+sub: "The First New ABC — Deck 3 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "Definition",
+
+heading: "What Is Attunement?",
+
+body: "Attunement is the ability to <strong>bring yourself into harmony</strong> with individuals, groups, and contexts. It's broader than empathy — it's about reading the room, adjusting your approach, and genuinely connecting with where another person is coming from. Think of it like tuning an instrument so it resonates with the others."
+
+},
+
+{
+
+type: "content",
+
+tag: "Key Distinction",
+
+heading: "Empathy vs. Perspective-Taking",
+
+body: "<strong>Empathy</strong> is feeling what others feel — it's emotional. <strong>Perspective-taking</strong> is understanding what others think — it's cognitive. Studies show that perspective-taking makes you more effective at moving others. Feeling their pain is good; understanding their logic and priorities is better. Both matter, but don't neglect the cognitive side."
+
+},
+
+{
+
+type: "content",
+
+tag: "Counterintuitive Finding",
+
+heading: "The Power of Less",
+
+body: "A surprising research finding: people with <strong>less power</strong> in a given context tend to be better at reading others and taking their perspective. High-status people often rely on their own frame and miss important signals. Walk into a pitch with a slight reduction in ego — assume you have something to learn."
+
+},
+
+{
+
+type: "content",
+
+tag: "The Sweet Spot",
+
+heading: "The Ambivert Advantage",
+
+body: "Extroverts don't make the best salespeople — despite the stereotype. <strong>Ambiverts</strong> — those in the middle of the introvert/extrovert spectrum — are naturally attuned. They listen and talk in roughly equal measure. Introverts can be too withdrawn; extroverts can be too dominant and talk over people."
+
+},
+
+{
+
+type: "content",
+
+tag: "Practice",
+
+heading: "How to Practice Attunement",
+
+body: "<ul><li>Before any important conversation, spend <strong>60 seconds</strong> imagining the other person's perspective in detail</li><li>In meetings, practice <strong>talking less and listening more</strong> — notice what changes</li><li>Subtly <strong>mirror posture and body language</strong> of the person you're speaking with — this builds unconscious rapport</li></ul>"
+
+},
+
+{
+
+type: "content",
+
+tag: "Takeaway",
+
+heading: "Key Takeaway: Attunement",
+
+body: "Attunement is the <strong>foundation of effective influence</strong>. You can't move someone if you don't understand where they're standing. Perspective-taking beats pure empathy. Ambiverts have a natural edge. And anyone can develop attunement with deliberate practice. Next: <strong>Buoyancy</strong>."
+
+}
+
+]
+
+},
+
+{
+
+title: "Buoyancy",
+
+subtitle: "The Second New ABC",
+
+color: "#7a3faa",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "Buoyancy",
+
+sub: "The Second New ABC — Deck 4 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Reality",
+
+heading: "The Ocean of Rejection",
+
+body: "Pink uses the metaphor of an <strong>ocean of rejection</strong>. One study found that 60% of customers say no four times before saying yes, yet 48% of salespeople never make a single follow-up. For non-sales sellers, rejection looks different but stings just as much: the ignored proposal, the dismissed idea, the unanswered email."
+
+},
+
+{
+
+type: "content",
+
+tag: "Before the Pitch",
+
+heading: "Interrogative Self-Talk",
+
+body: "Before a high-stakes moment, <strong>asking yourself</strong> 'Can I do this?' outperforms telling yourself 'I can do this!' Why? The question activates intrinsic motivation — it causes you to think through your reasons and strategies, generating genuine confidence rather than hollow affirmation."
+
+},
+
+{
+
+type: "content",
+
+tag: "During",
+
+heading: "The Power of Positivity Ratios",
+
+body: "Psychologist Barbara Fredrickson's research shows: high-performing individuals tend to maintain a ratio of roughly <strong>3 positive emotions to 1 negative</strong> during interactions. Some negativity keeps you grounded in reality. But overwhelming negativity collapses thinking; sustained positivity expands it."
+
+},
+
+{
+
+type: "content",
+
+tag: "After",
+
+heading: "Explanatory Style & Resilience",
+
+body: "Drawing on Seligman's learned optimism research, how you explain setbacks matters enormously. The three dimensions:<ul><li><strong>Permanence:</strong> Temporary vs. permanent</li><li><strong>Pervasiveness:</strong> Specific vs. universal</li><li><strong>Personalization:</strong> External vs. internal</li></ul>Optimists treat setbacks as temporary, specific, and contextual."
+
+},
+
+{
+
+type: "content",
+
+tag: "In Practice",
+
+heading: "The 3:1 Rule in Practice",
+
+body: "<ul><li>Start meetings by noting <strong>what's working</strong></li><li>Keep a brief log of <strong>small wins</strong></li><li>Reframe setbacks as <strong>data, not verdicts</strong></li><li>Find genuine — not forced — reasons for optimism</li></ul>The goal isn't toxic positivity. It's sustainable resilience."
+
+},
+
+{
+
+type: "content",
+
+tag: "Takeaway",
+
+heading: "Key Takeaway: Buoyancy",
+
+body: "Buoyancy is built <strong>before, during, and after</strong> — through interrogative self-talk, healthy positivity ratios, and optimistic explanatory style. It's a skillset, not a personality trait. Anyone can build it. Next: <strong>Clarity</strong>."
+
+}
+
+]
+
+},
+
+{
+
+title: "Clarity",
+
+subtitle: "The Third New ABC",
+
+color: "#a05c1a",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "Clarity",
+
+sub: "The Third New ABC — Deck 5 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Shift",
+
+heading: "From Information Access to Curation",
+
+body: "We have more information than ever, but more confusion than ever too. The person who can cut through the noise and identify <strong>what actually matters</strong> is extraordinarily valuable. A great doctor today isn't the one with the most facts — it's the one who synthesizes those facts into the clearest picture for the patient."
+
+},
+
+{
+
+type: "content",
+
+tag: "Context",
+
+heading: "The Old Edge Is Gone",
+
+body: "Information asymmetry has evaporated. Buyers research before buying. Patients Google before appointments. Employees know salary ranges before negotiating. <strong>The seller's job is no longer to provide information — it's to provide perspective.</strong>"
+
+},
+
+{
+
+type: "content",
+
+tag: "The New Edge",
+
+heading: "Finding Problems vs. Solving Problems",
+
+body: "In an age of information abundance, the ability to <strong>identify the right problem</strong> is more valuable than the ability to solve a given one. Novices solve the problems they're given; experts reframe the problem itself. The great mover helps people see a problem they didn't know they had."
+
+},
+
+{
+
+type: "content",
+
+tag: "Technique",
+
+heading: "The Art of Framing",
+
+body: "Powerful frames Pink highlights:<ul><li><strong>Experience frame:</strong> Turn a product into an experience</li><li><strong>Potential frame:</strong> People respond more to future potential than past achievement</li><li><strong>Loss frame:</strong> People are more motivated by avoiding a loss than achieving an equivalent gain</li></ul>"
+
+},
+
+{
+
+type: "content",
+
+tag: "Tool",
+
+heading: "Contrast as a Clarity Tool",
+
+body: "One of the most effective clarity tools is <strong>contrast</strong> — showing the gap between where someone is now and where they could be. This creates narrative tension that motivates action. Real estate agents do this intuitively. Nonprofits use it powerfully. How do you use contrast in your own communication?"
+
+},
+
+{
+
+type: "content",
+
+tag: "Takeaway",
+
+heading: "Key Takeaway: Clarity",
+
+body: "Clarity is the ability to help others <strong>see their situation more accurately</strong> and act on it more effectively. The three tools: curation, problem-finding, and framing. Together, Attunement, Buoyancy, and Clarity form the mindset foundation. Next: the practical skills — <strong>Pitch, Improvise, and Serve</strong>."
+
+}
+
+]
+
+},
+
+{
+
+title: "Pitch & Improvise",
+
+subtitle: "Practical Tools — Part 1",
+
+color: "#1a7a7a",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "Pitch &\nImprovise",
+
+sub: "Practical Tools for Moving Others — Deck 6 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Evolution",
+
+heading: "Beyond the Elevator Pitch",
+
+body: "The traditional elevator pitch — a 30-second monologue about who you are and what you do — was designed for a slower world. Today, attention is fractured and contexts vary wildly. Pink argues we need a <strong>wider repertoire of pitches</strong>, each suited to a different situation."
+
+},
+
+{
+
+type: "content",
+
+tag: "Overview",
+
+heading: "The 6 Modern Pitches",
+
+body: "<ul><li><strong>One-Word:</strong> Own a single concept in someone's mind</li><li><strong>Question:</strong> Invite the audience to find their own reasons</li><li><strong>Rhyming:</strong> Rhyme improves memorability and perceived truth</li><li><strong>Subject-Line:</strong> Utility OR curiosity — not both</li><li><strong>Short-Form:</strong> Constraints force clarity</li><li><strong>Pixar:</strong> Narrative structure that drives emotional engagement</li></ul>"
+
+},
+
+{
+
+type: "content",
+
+tag: "Deep Dive",
+
+heading: "The Question & Pixar Pitches",
+
+body: "<strong>Question Pitch:</strong> When your argument is strong, a question invites the listener to generate their own reasons for agreeing — making them more committed. Try: 'Don't you think this strategy could save us real money?'<br/><br/><strong>Pixar Pitch structure:</strong> Once upon a time… Every day… One day… Because of that… Because of that… Until finally…"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Model",
+
+heading: "Introduction to Improv",
+
+body: "Pink looks to <strong>improvisational theater</strong> as a model for real-world persuasion. Improv actors can't script their responses — they have to listen deeply, stay present, and build on whatever the other person offers. This is exactly what's required in a sales conversation, a negotiation, or a difficult meeting."
+
+},
+
+{
+
+type: "content",
+
+tag: "Core Principle",
+
+heading: 'The "Yes, And…" Principle',
+
+body: 'The foundational rule of improv: <strong>accept what your partner offers ("yes") and build on it ("and")</strong>. In influence contexts, this means not blocking or redirecting what the other person says. "Yes, and" keeps conversations generative and signals respect. The opposite — "yes, but" — shuts conversations down and erodes trust.'
+
+},
+
+{
+
+type: "content",
+
+tag: "Takeaway",
+
+heading: "Key Takeaway: Pitch & Improvise",
+
+body: "Having the right pitch for the right moment and the ability to <strong>respond fluidly in real time</strong> are essential complements to the ABCs. Practice: try the Pixar Pitch with something from your own work. Try 'Yes, and…' in your next meeting. Final deck: <strong>Serve</strong>."
+
+}
+
+]
+
+},
+
+{
+
+title: "Serve",
+
+subtitle: "Purpose, Ethics & the Big Picture",
+
+color: "#7a2a5a",
+
+slides: [
+
+{
+
+type: "title",
+
+heading: "Serve",
+
+sub: "Purpose, Ethics & the Big Picture — Deck 7 of 7"
+
+},
+
+{
+
+type: "content",
+
+tag: "The Problem",
+
+heading: "Why Selling Feels Sleazy",
+
+body: "Many people feel deep discomfort about selling or persuading. Pink traces this to a long history of manipulation, information exploitation, and misaligned incentives. But the antidote isn't to stop influencing — it's to <strong>change the orientation</strong>. The problem was never persuasion; it was <em>self-serving</em> persuasion."
+
+},
+
+{
+
+type: "content",
+
+tag: "Ethical Filter",
+
+heading: "Two Questions That Reframe Everything",
+
+body: "Pink offers two diagnostic questions to evaluate any influence attempt:<br/><br/><strong>1.</strong> 'If the person I'm trying to move agrees, will their life improve?'<br/><br/><strong>2.</strong> 'When this interaction is over, will the world be a little better?'<br/><br/>If both are yes, pursue it with full energy and conviction."
+
+},
+
+{
+
+type: "content",
+
+tag: "Research",
+
+heading: "Making It Personal",
+
+body: "Research shows people work harder, more creatively, and more ethically when they can <strong>see the direct human impact</strong> of their work. In one study, fundraisers who briefly met a scholarship recipient raised dramatically more money than those who didn't. Abstract purpose becomes concrete motivation when you can see a face."
+
+},
+
+{
+
+type: "content",
+
+tag: "Strategy",
+
+heading: "Honesty as Competitive Advantage",
+
+body: "In a world where information is abundant and reputations are public, <strong>honesty isn't just morally right — it's strategically superior</strong>. Companies that proactively share their flaws alongside their strengths build the trust that makes long-term relationships possible. The servant seller builds a reputation that does the selling for them."
+
+},
+
+{
+
+type: "content",
+
+tag: "The Full System",
+
+heading: "Attunement + Buoyancy + Clarity + Serve",
+
+body: "<ul><li><strong>Attunement</strong> — Understanding others deeply</li><li><strong>Buoyancy</strong> — Resilience through rejection</li><li><strong>Clarity</strong> — Curating insight, not just information</li><li><strong>Pitch</strong> — Communicating compellingly</li><li><strong>Improvise</strong> — Responding fluidly in the moment</li><li><strong>Serve</strong> — Anchoring everything in purpose</li></ul>"
+
+},
+
+{
+
+type: "content",
+
+tag: "Final Takeaway",
+
+heading: "Sales as a Noble, Human Act",
+
+body: "To move others — to help them see something new, get them unstuck, connect them with something that improves their life — is one of the most <strong>fundamentally human</strong> things we do. Teachers, parents, leaders, doctors — they all do it. This week: notice the moments when you're trying to move someone. Are you doing it to serve?"
+
+}
+
+]
+
+}
+
+];
+
+
+
+let currentDeck = 0;
+
+let currentSlide = 0;
+
+let showingOverview = true;
+
+
+
+// Build sidebar
+
+const deckList = document.getElementById('deck-list');
+
+DECKS.forEach((deck, di) => {
+
+const el = document.createElement('div');
+
+el.className = 'deck-item';
+
+el.innerHTML = `<div class="deck-num">DECK ${String(di+1).padStart(2,'0')}</div><div class="deck-title">${deck.title}</div><div class="deck-sub">${deck.subtitle}</div>`;
+
+el.addEventListener('click', () => { showingOverview = false; goToDeck(di, 0); });
+
+deckList.appendChild(el);
+
+});
+
+
+
+// Build overview
+
+const ov = document.getElementById('overview');
+
+ov.innerHTML = `<h2>To Sell Is Human</h2><div class="ov-sub">Daniel H. Pink — Select a deck to begin</div><div class="ov-grid">${DECKS.map((d,i) => `<div class="ov-card" data-deck="${i}"><div class="ov-color-bar" style="background:${d.color}"></div><div class="ov-num">DECK ${String(i+1).padStart(2,'0')}</div><div class="ov-title">${d.title}</div><div class="ov-desc">${d.subtitle}</div><div class="ov-slides">${d.slides.length} SLIDES</div><div class="ov-deco">${i+1}</div></div>`).join('')}</div>`;
+
+ov.querySelectorAll('.ov-card').forEach(card => {
+
+card.addEventListener('click', () => { showingOverview = false; goToDeck(parseInt(card.dataset.deck), 0); });
+
+});
+
+
+
+// Build slides
+
+const slideArea = document.getElementById('slide-area');
+
+
+
+function buildSlides() {
+
+document.querySelectorAll('.slide').forEach(s => s.remove());
+
+DECKS.forEach((deck, di) => {
+
+deck.slides.forEach((slide, si) => {
+
+const el = document.createElement('div');
+
+el.className = `slide layout-${slide.type}`;
+
+el.dataset.deck = di;
+
+el.dataset.slide = si;
+
+
+
+if (slide.type === 'title') {
+
+el.innerHTML = `<div class="slide-inner">
+
+<div class="title-accent-bar" style="background:${deck.color}"></div>
+
+<div class="title-rule" style="background:${deck.color}"></div>
+
+<div class="deck-badge"><span class="badge-dot" style="background:${deck.color}"></span>Deck ${di+1} of ${DECKS.length} &nbsp;·&nbsp; ${deck.subtitle}</div>
+
+<h2>${slide.heading.replace(/\n/g,'<br/>')}</h2>
+
+<div class="subtitle">${slide.sub}</div>
+
+<div class="title-deco-num">${di+1}</div>
+
+</div>`;
+
+} else {
+
+const liColor = deck.color;
+
+el.innerHTML = `<div class="slide-inner">
+
+<div class="slide-content-main">
+
+<div class="content-accent-bar" style="background:${deck.color}"></div>
+
+<div class="slide-tag" style="color:${deck.color}">${slide.tag}</div>
+
+<div class="slide-title-text">${slide.heading}</div>
+
+<div class="slide-body slide-body-${di}">${slide.body}</div>
+
+<div class="slide-footer">
+
+<div class="slide-footer-num">Deck ${di+1} · Slide ${si+1} / ${deck.slides.length}</div>
+
+<div class="slide-footer-rule"></div>
+
+</div>
+
+</div>
+
+</div>`;
+
+// Color list markers
+
+el.querySelectorAll('.slide-body li').forEach(li => {
+
+li.style.cssText += ``;
+
+const pseudo = document.createElement('style');
+
+});
+
+// Apply li marker color via inline style trick
+
+const styleTag = document.createElement('style');
+
+styleTag.textContent = `.slide-body-${di} li::before { background: ${liColor} !important; }`;
+
+document.head.appendChild(styleTag);
+
+}
+
+
+
+slideArea.appendChild(el);
+
+});
+
+});
+
+}
+
+
+
+buildSlides();
+
+
+
+function goToDeck(di, si) {
+
+currentDeck = di;
+
+currentSlide = si;
+
+renderState();
+
+}
+
+
+
+function renderState() {
+
+document.getElementById('overview').classList.toggle('visible', showingOverview);
+
+document.querySelectorAll('.slide').forEach(s => {
+
+const active = !showingOverview && parseInt(s.dataset.deck) === currentDeck && parseInt(s.dataset.slide) === currentSlide;
+
+s.classList.toggle('visible', active);
+
+});
+
+document.querySelectorAll('.deck-item').forEach((el, i) => el.classList.toggle('active', !showingOverview && i === currentDeck));
+
+
+
+const total = DECKS[currentDeck]?.slides.length || 1;
+
+document.getElementById('cur-num').textContent = showingOverview ? '—' : currentSlide + 1;
+
+document.getElementById('total-num').textContent = showingOverview ? '—' : total;
+
+document.getElementById('progress-fill').style.width = showingOverview ? '0%' : ((currentSlide + 1) / total * 100) + '%';
+
+document.getElementById('btn-prev').disabled = showingOverview || (currentDeck === 0 && currentSlide === 0);
+
+document.getElementById('btn-next').disabled = showingOverview || (currentDeck === DECKS.length - 1 && currentSlide === DECKS[currentDeck].slides.length - 1);
+
+}
+
+
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+
+if (showingOverview) return;
+
+if (currentSlide > 0) currentSlide--;
+
+else if (currentDeck > 0) { currentDeck--; currentSlide = DECKS[currentDeck].slides.length - 1; }
+
+renderState();
+
+});
+
+document.getElementById('btn-next').addEventListener('click', () => {
+
+if (showingOverview) return;
+
+if (currentSlide < DECKS[currentDeck].slides.length - 1) currentSlide++;
+
+else if (currentDeck < DECKS.length - 1) { currentDeck++; currentSlide = 0; }
+
+renderState();
+
+});
+
+document.getElementById('overview-btn').addEventListener('click', () => { showingOverview = true; renderState(); });
+
+
+
+document.addEventListener('keydown', e => {
+
+if (showingOverview) return;
+
+if (e.key === 'ArrowRight' || e.key === 'ArrowDown') document.getElementById('btn-next').click();
+
+if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') document.getElementById('btn-prev').click();
+
+if (e.key === 'Escape') { showingOverview = true; renderState(); }
+
+});
+
+
+
+renderState();
+
+</script>
+
+</body>
+
+</html>
+
+
